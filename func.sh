@@ -10,10 +10,10 @@ main() {
 
   local json=$(get_html $gitlaburl $project $issue)
   
-  echo $json| jq -c '.[] .notes[0] .created_at' > /tmp/dates
-  echo $json| jq -c '.[] .notes[0] .author .name' > /tmp/author
-  echo $json| jq -c '.[] .notes[0] .note' > /tmp/note
-  echo $json| jq -c '.[] .notes[0] .id' > /tmp/id
+  echo $json| jq -cr '.[] .notes[0] .created_at' > /tmp/dates
+  echo $json| jq -cr '.[] .notes[0] .author .name' > /tmp/author
+  echo $json| jq -cr '.[] .notes[0] .note' > /tmp/note
+  echo $json| jq -cr '.[] .notes[0] .id' > /tmp/id
   cat > /tmp/feed <<EOF
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
@@ -24,12 +24,13 @@ main() {
   <description>Update on issue #$issue</description>
 EOF
   while read -u 3 -r date && read -u 4 -r author && read -u 5 -r note && read -u 6 -r id; do
+    dateRfc=`date -R -d $date`
     cat >> /tmp/feed <<EOF
   <item>
     <title>Note from $author</title>
     <link>$gitlaburl$project/issues/$issue#note_$id</link>
     <description>$note</description>
-    <pubDate>$date</pubDate>
+    <pubDate>$dateRfc</pubDate>
     <author>$author</author>
   </item>
 EOF
