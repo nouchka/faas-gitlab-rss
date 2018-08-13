@@ -1,0 +1,2 @@
+DOCKER_IMAGE=gitlab-rss
+TEST_FUNC=https://gitlab.com/ gitlab-org/gitlab-ce 24030
