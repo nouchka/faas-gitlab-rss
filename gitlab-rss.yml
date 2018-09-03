@@ -6,4 +6,4 @@ functions:
   gitlab-rss:
     lang: dockerfile
     handler: .
-    image: nouchka/gitlab-rss
+    image: nouchka/gitlab-rss:latest
